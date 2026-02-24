@@ -126,9 +126,27 @@ function drawPseudoQR(canvas, text){
 
 // ✅ 実用QRに差し替えたい場合：README参照（qrcode.min.jsなど）
 function renderQR(canvas, url){
-  drawPseudoQR(canvas, url);
-}
+  // 本物QRをcanvasに描画
+  const opts = {
+    width: 260,
+    margin: 2,
+    errorCorrectionLevel: "M"
+  };
 
+  if (typeof QRCode === "undefined" || !QRCode.toCanvas) {
+    // もし読み込み失敗してた時の保険
+    drawPseudoQR(canvas, url);
+    return;
+  }
+
+  QRCode.toCanvas(canvas, url, opts, (err) => {
+    if (err) {
+      console.error(err);
+      // 失敗したら一応フォールバック
+      drawPseudoQR(canvas, url);
+    }
+  });
+}
 /* ---------- WebRTC ---------- */
 
 const RTC_CONFIG = {
