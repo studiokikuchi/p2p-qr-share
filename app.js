@@ -126,16 +126,13 @@ function drawPseudoQR(canvas, text){
 
 // ✅ 実用QRに差し替えたい場合：README参照（qrcode.min.jsなど）
 function renderQR(canvas, url){
-  // qrcodejs は「要素」にQRを描く。canvas直描きではない。
   if (typeof QRCode === "undefined") {
-    // 読み込み失敗時はフォールバック
     drawPseudoQR(canvas, url);
     return;
   }
 
   const parent = canvas.parentElement;
 
-  // 既存のQRコンテナがあれば消す
   const holderId = canvas.id + "_holder";
   let holder = document.getElementById(holderId);
   if (!holder) {
@@ -152,18 +149,15 @@ function renderQR(canvas, url){
     holder.innerHTML = "";
   }
 
-  // 画面のcanvasは使わないので隠す（見た目そのまま保つため）
   canvas.style.display = "none";
 
-  // QR生成（大きめにして読み取りやすくする）
   new QRCode(holder, {
     text: url,
     width: 420,
     height: 420,
     correctLevel: QRCode.CorrectLevel.M
   });
-}
-/* ---------- WebRTC ---------- */
+}/* ---------- WebRTC ---------- */
 
 const RTC_CONFIG = {
   iceServers: [
