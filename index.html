@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>P2P QR Share</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header>
+    <h1>P2P QR Share</h1>
+    <p class="sub">サーバ無し / QR2回 / WebRTCで画像をリアルタイム転送</p>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>送る（Sender）</h2>
+      <ol class="steps">
+        <li>画像を選ぶ</li>
+        <li>「Offer QRを作る」→ 相手に見せて読んでもらう</li>
+        <li>相手が表示した「Answer QR」をあなたが読む → 接続 → 送信</li>
+      </ol>
+
+      <input id="file" type="file" accept="image/*" />
+      <div class="row">
+        <button id="btnOffer">Offer QRを作る</button>
+        <button id="btnSend" disabled>送信</button>
+      </div>
+
+      <div class="qrBox">
+        <div class="row space">
+          <div class="pill">Sender QR</div>
+          <div class="mono small" id="senderState">未接続</div>
+        </div>
+        <canvas id="qrSender" width="260" height="260"></canvas>
+        <p class="mono small" id="senderLink"></p>
+      </div>
+
+      <div class="row">
+        <progress id="progSend" value="0" max="1"></progress>
+        <span class="small" id="sendInfo"></span>
+      </div>
+
+      <p class="small muted">
+        ※「Answer QR」は標準カメラで読み取って開いてください（Web内スキャンは使わない設計）。
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>受け取る（Receiver）</h2>
+      <ol class="steps">
+        <li>相手のOffer QRを標準カメラで読む（このページが開く）</li>
+        <li>自動でAnswer QRが出る</li>
+        <li>そのAnswer QRを相手に見せる</li>
+        <li>接続後、受信した画像を保存</li>
+      </ol>
+
+      <div class="qrBox">
+        <div class="row space">
+          <div class="pill">Receiver QR</div>
+          <div class="mono small" id="receiverState">待機中</div>
+        </div>
+        <canvas id="qrReceiver" width="260" height="260"></canvas>
+        <p class="mono small" id="receiverLink"></p>
+      </div>
+
+      <div class="row">
+        <progress id="progRecv" value="0" max="1"></progress>
+        <button id="btnSave" disabled>保存</button>
+      </div>
+      <p class="small" id="recvInfo"></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p class="small muted">
+      うまく繋がらない時は「相手と同じWi-Fiに入る」「テザリングを切り替える」等で通ることがあります。
+    </p>
+  </footer>
+
+  <script src="./lz-string.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
